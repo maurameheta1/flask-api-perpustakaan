@@ -1,24 +1,27 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask_cors import CORS
 from config.database import engine, Base
 from routes.web import web
 import models.perpustakaan_model  # register model
 
 app = Flask(__name__)
-CORS(app)  # aktifkan CORS untuk semua route
+CORS(app)
 
-# Buat tabel otomatis (kalau belum ada di DB)
+# Buat tabel otomatis
 Base.metadata.create_all(bind=engine)
 
-# Daftarkan blueprint route
+# Daftarkan blueprint
 app.register_blueprint(web)
 
-# Endpoint default agar Railway tahu API hidup
+# ✅ Tambahkan route default biar Railway dapat respons
 @app.route("/")
 def home():
-    return {"message": "API Flask Perpustakaan aktif 🚀"}
+    return jsonify({
+        "message": "API Perpustakaan aktif 🚀",
+        "endpoints": ["/buku (GET, POST, PUT, DELETE)"]
+    })
 
 if __name__ == "__main__":
     import os
-    port = int(os.environ.get("PORT", 8080))  # Gunakan port Railway
+    port = int(os.environ.get("PORT", 8080))  # pakai port 8080 agar cocok dengan Railway
     app.run(host="0.0.0.0", port=port)
