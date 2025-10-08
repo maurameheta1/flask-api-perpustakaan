@@ -3,25 +3,24 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 from dotenv import load_dotenv
 
-# Muat file .env
+# Load environment variables dari file .env
 load_dotenv()
 
-# Ambil URL database dari environment variable
+# Ambil URL database dari environment
 DATABASE_URL = os.getenv("DATABASE_URL")
 
+# Pastikan URL tidak None
 if not DATABASE_URL:
-    raise ValueError("❌ DATABASE_URL tidak ditemukan di environment atau file .env")
+    raise ValueError("DATABASE_URL is not set. Please check your .env file or Railway environment variables.")
 
-# Engine koneksi
+# Buat engine koneksi
 engine = create_engine(DATABASE_URL, echo=True)
 
-# Session untuk query
+# Session dan Base ORM
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-# Base untuk model ORM
 Base = declarative_base()
 
-# Dependency untuk session
+# Dependency session
 def get_db():
     db = SessionLocal()
     try:
