@@ -5,16 +5,20 @@ from routes.web import web
 import models.perpustakaan_model  # register model
 
 app = Flask(__name__)
-CORS(app)  # ✅ aktifkan CORS untuk semua route
+CORS(app)  # aktifkan CORS untuk semua route
 
 # Buat tabel otomatis (kalau belum ada di DB)
 Base.metadata.create_all(bind=engine)
 
-# Daftarkan route
+# Daftarkan blueprint route
 app.register_blueprint(web)
+
+# Endpoint default agar Railway tahu API hidup
+@app.route("/")
+def home():
+    return {"message": "API Flask Perpustakaan aktif 🚀"}
 
 if __name__ == "__main__":
     import os
-    port = int(os.environ.get("PORT", 5000))  # gunakan PORT dari Railway jika ada
-    app.run(debug=True, host="0.0.0.0", port=port)
-
+    port = int(os.environ.get("PORT", 8080))  # Gunakan port Railway
+    app.run(host="0.0.0.0", port=port)

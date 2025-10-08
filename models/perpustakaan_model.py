@@ -5,11 +5,9 @@ class Perpustakaan(Base):
     __tablename__ = "buku"
 
     id_buku = Column(Integer, primary_key=True, index=True)
-    judul_buku = Column(String(150), nullable=False)     
-    pengarang = Column(String(100), nullable=False) 
-    penerbit = Column(String(100), nullable=False) 
-    tahun = Column(Integer, nullable=False) 
-    isbn = Column(String(20), nullable=False) 
-    cover = Column(String(100), nullable=False) # format datetime
-
-
+    judul_buku = Column(String(255))
+    pengarang = Column(String(255))
+    penerbit = Column(String(255))
+    tahun = Column(String(10))
+    isbn = Column(String(50))
+    cover = Column(String(255))

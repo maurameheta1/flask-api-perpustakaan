@@ -3,9 +3,8 @@ from controllers.PerpustakaanController import get_all_buku, add_buku, update_bu
 
 web = Blueprint("web", __name__)
 
-# Endpoint API
+# Endpoint API Buku
 web.route("/buku", methods=["GET"])(get_all_buku)
 web.route("/buku", methods=["POST"])(add_buku)
 web.route("/buku/<int:id_buku>", methods=["PUT"])(update_buku)
 web.route("/buku/<int:id_buku>", methods=["DELETE"])(delete_buku)
-

@@ -3,21 +3,23 @@ from config.database import get_db
 from models.perpustakaan_model import Perpustakaan
 from sqlalchemy.orm import Session
 
-#get
+# GET semua buku
 def get_all_buku():
     db: Session = next(get_db())
     data = db.query(Perpustakaan).all()
-    return jsonify([{
-        "id_buku": k.id_buku,
-        "judul_buku": k.judul_buku,
-        "pengarang": k.pengarang,
-        "penerbit": k.penerbit,
-        "tahun": k.tahun,
-        "isbn": k.isbn,
-        "cover": k.cover,
-    } for k in data])
+    return jsonify([
+        {
+            "id_buku": k.id_buku,
+            "judul_buku": k.judul_buku,
+            "pengarang": k.pengarang,
+            "penerbit": k.penerbit,
+            "tahun": k.tahun,
+            "isbn": k.isbn,
+            "cover": k.cover,
+        } for k in data
+    ])
 
-#post
+# POST tambah buku
 def add_buku():
     db: Session = next(get_db())
     body = request.json
@@ -39,18 +41,16 @@ def add_buku():
         "id_buku": new_data.id_buku
     })
 
-#put
+# PUT update buku
 def update_buku(id_buku):
     db: Session = next(get_db())
     body = request.json
 
-    # Cari data buku berdasarkan ID
     buku = db.query(Perpustakaan).filter(Perpustakaan.id_buku == id_buku).first()
     if not buku:
         return jsonify({"message": "Data buku tidak ditemukan"}), 404
 
-    # Update kolom jika ada di request body
-    buku.judul_buku = body.get("judul", buku.judul_buku)
+    buku.judul_buku = body.get("judul_buku", buku.judul_buku)
     buku.pengarang = body.get("pengarang", buku.pengarang)
     buku.penerbit = body.get("penerbit", buku.penerbit)
     buku.tahun = body.get("tahun", buku.tahun)
@@ -65,20 +65,16 @@ def update_buku(id_buku):
         "id_buku": buku.id_buku
     })
 
-#delete
+# DELETE buku
 def delete_buku(id_buku):
     db: Session = next(get_db())
-    
-    # Cari data buku berdasarkan ID
     buku = db.query(Perpustakaan).filter(Perpustakaan.id_buku == id_buku).first()
     if not buku:
         return jsonify({"message": "Data buku tidak ditemukan"}), 404
 
-    # Hapus data
     db.delete(buku)
     db.commit()
 
     return jsonify({
         "message": f"Data buku dengan id {id_buku} berhasil dihapus"
     })
-

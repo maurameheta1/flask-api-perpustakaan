@@ -3,20 +3,19 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 from dotenv import load_dotenv
 
-# Load environment variables dari file .env
+# Load environment variables
 load_dotenv()
 
-# Ambil URL database dari environment
+# Ambil URL database dari environment (Railway)
 DATABASE_URL = os.getenv("DATABASE_URL")
 
-# Pastikan URL tidak None
 if not DATABASE_URL:
-    raise ValueError("DATABASE_URL is not set. Please check your .env file or Railway environment variables.")
+    raise ValueError("DATABASE_URL is not set. Check Railway Variables.")
 
-# Buat engine koneksi
-engine = create_engine(DATABASE_URL, echo=True)
+# Buat koneksi database
+engine = create_engine(DATABASE_URL, echo=False)
 
-# Session dan Base ORM
+# ORM setup
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
