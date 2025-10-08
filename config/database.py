@@ -1,8 +1,16 @@
+import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
+from dotenv import load_dotenv
 
-# URL database dari Railway
-DATABASE_URL = "postgresql://postgres:lAJUHGIWNOBZpOlDRLMZGiaGzexiqzZH@metro.proxy.rlwy.net:26241/railway"
+# Muat file .env
+load_dotenv()
+
+# Ambil URL database dari environment variable
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+if not DATABASE_URL:
+    raise ValueError("❌ DATABASE_URL tidak ditemukan di environment atau file .env")
 
 # Engine koneksi
 engine = create_engine(DATABASE_URL, echo=True)
